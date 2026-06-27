@@ -1,0 +1,84 @@
+body {
+    font-family: Arial;
+    margin: 0;
+    background: #f2f2f2;
+}
+
+/* LOGIN */
+#login {
+    text-align: center;
+    margin-top: 100px;
+}
+
+#login input {
+    display: block;
+    margin: 10px auto;
+    padding: 10px;
+    width: 200px;
+}
+
+button {
+    padding: 10px;
+    background: #ff6b35;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #e85a2a;
+}
+
+/* APP */
+.hidden {
+    display: none;
+}
+
+header {
+    background: #333;
+    color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.form {
+    background: white;
+    padding: 15px;
+    margin: 10px;
+}
+
+.form input, .form select {
+    margin: 5px;
+    padding: 8px;
+}
+
+/* MESAS */
+#mesas {
+    display: grid;
+    grid-template-columns: repeat(5, 60px);
+    gap: 10px;
+    margin: 10px;
+}
+
+.mesa {
+    width: 60px;
+    height: 60px;
+    background: green;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.ocupada {
+    background: red;
+}
+
+/* LISTAS */
+ul {
+    background: white;
+    margin: 10px;
+    padding: 10px;
+}

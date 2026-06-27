@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>La Cuchara Brava</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login">
+    <h2>🍽️ La Cuchara Brava</h2>
+    <input type="text" id="usuario" placeholder="Usuario">
+    <input type="password" id="password" placeholder="Contraseña">
+    <button onclick="login()">Ingresar</button>
+    <p id="mensaje"></p>
+</div>
+
+<!-- APP -->
+<div id="app" class="hidden">
+
+    <header>
+        <h2>Reservas de Mesas</h2>
+        <button onclick="logout()">Salir</button>
+    </header>
+
+    <!-- FORM -->
+    <div class="form">
+        <input type="text" id="cliente" placeholder="Nombre del cliente">
+
+        <select id="servicio">
+            <option>Desayuno</option>
+            <option>Almuerzo</option>
+            <option>Cena</option>
+        </select>
+
+        <input type="date" id="fecha">
+
+        <select id="piso">
+            <option>Piso 1</option>
+            <option>Piso 2</option>
+        </select>
+
+        <select id="ubicacion">
+            <option>Interior</option>
+            <option>Balcón</option>
+        </select>
+
+        <select id="evento">
+            <option>Sin evento</option>
+            <option>Música en vivo</option>
+            <option>Show</option>
+        </select>
+
+        <button onclick="crearReserva()">Reservar</button>
+    </div>
+
+    <!-- MESAS -->
+    <h3>Mapa de Mesas</h3>
+    <div id="mesas"></div>
+
+    <!-- CARTA -->
+    <h3>Carta</h3>
+    <ul id="carta"></ul>
+
+    <!-- RESERVAS -->
+    <h3>Reservas</h3>
+    <ul id="lista"></ul>
+
+</div>
+
+<script src="script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- Tu script principal va abajo -->
+<script src="script.js"></script>
+</body>
+</html>
