@@ -1,37 +1,52 @@
-// 1. Configura tus credenciales de Supabase
-const SUPABASE_URL = 'https://lmlbrbepkwcpeeiffazm.supabase.co'; // Copia tu Project URL exacta
-const SUPABASE_ANON_KEY = 'sb_publishable_NYqacCl9TRaTA5vV4TrY2g_juF4ARo0'; // Copia tu Publishable key completa
+// ==========================================
+// 1. CONFIGURACIÓN E INICIALIZACIÓN DE SUPABASE
+// ==========================================
+const SUPABASE_URL = 'https://lmlbrbepkwcpeeiffazm.supabase.co'; 
+const SUPABASE_ANON_KEY = 'sb_publishable_NYqacCl9TRaTA5vV4TrY2g_juF4ARo0'; 
 
-// 2. Inicializa el cliente global de Supabase
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// CAMBIO CLAVE: Cambiamos el nombre de la variable a "supabaseClient"
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// ¡Listo! Ya puedes usar la variable 'supabase' en el resto de tu código.
-
-let reservas = JSON.parse(localStorage.getItem("reservas")) || [];
+// Arreglo global dinámico
+let reservas = [];
 let mesaSeleccionada = null;
 
-// LOGIN
-function login() {
+// ==========================================
+// LOGIN REAL CON SUPABASE
+// ==========================================
+async function login() {
     let u = document.getElementById("usuario").value;
     let p = document.getElementById("password").value;
 
-    if (u === "cucharita" && p === "1") {
-        document.getElementById("login").classList.add("hidden");
-        document.getElementById("app").classList.remove("hidden");
+    // Usamos supabaseClient
+    const { data: usuarioEncontrado, error } = await supabaseClient
+        .from('usuarios')
+        .select('*')
+        .eq('username', u)
+        .eq('password', p)
+        .maybeSingle(); 
 
-        cargarMesas();
-        cargarCarta();
-        cargarReservas();
-    } else {
-        document.getElementById("mensaje").textContent = "Error de login";
+    if (error || !usuarioEncontrado) {
+        document.getElementById("mensaje").textContent = "Error de login: Usuario o contraseña incorrectos";
+        console.log("Intento de login fallido: Credenciales inválidas.");
+        return;
     }
+
+    document.getElementById("login").classList.add("hidden");
+    document.getElementById("app").classList.remove("hidden");
+
+    await cargarReservas(); 
+    cargarMesas();          
+    cargarCarta();
 }
 
 function logout() {
     location.reload();
 }
 
-// MESAS
+// ==========================================
+// MESAS 
+// ==========================================
 function cargarMesas() {
     let cont = document.getElementById("mesas");
     cont.innerHTML = "";
@@ -41,7 +56,6 @@ function cargarMesas() {
         div.classList.add("mesa");
         div.textContent = i;
 
-        // verificar si está ocupada
         if (reservas.find(r => r.mesa == i)) {
             div.classList.add("ocupada");
         }
@@ -55,7 +69,9 @@ function cargarMesas() {
     }
 }
 
-// CARTA
+// ==========================================
+// CARTA 
+// ==========================================
 function cargarCarta() {
     let carta = [
         "Ceviche",
@@ -75,15 +91,16 @@ function cargarCarta() {
     });
 }
 
-// RESERVA
-function crearReserva() {
-
+// ==========================================
+// CREAR RESERVA (INSERTAR EN SUPABASE)
+// ==========================================
+async function crearReserva() {
     if (!mesaSeleccionada) {
         alert("Selecciona una mesa");
         return;
     }
 
-    let nueva = {
+    let nuevaReserva = {
         cliente: document.getElementById("cliente").value,
         servicio: document.getElementById("servicio").value,
         fecha: document.getElementById("fecha").value,
@@ -93,19 +110,42 @@ function crearReserva() {
         mesa: mesaSeleccionada
     };
 
-    reservas.push(nueva);
-    localStorage.setItem("reservas", JSON.stringify(reservas));
+    // Usamos supabaseClient
+    const { error } = await supabaseClient
+        .from('reservas')
+        .insert([nuevaReserva]);
 
+    if (error) {
+        console.error("Error al guardar la reserva:", error.message);
+        alert("No se pudo guardar la reserva en la base de datos.");
+        return;
+    }
+
+    alert("¡Reserva guardada con éxito!");
     mesaSeleccionada = null;
 
-    cargarReservas();
+    await cargarReservas();
     cargarMesas();
 }
 
-// LISTAR
-function cargarReservas() {
+// ==========================================
+// LISTAR RESERVAS (LEER DESDE SUPABASE)
+// ==========================================
+async function cargarReservas() {
     let ul = document.getElementById("lista");
     ul.innerHTML = "";
+
+    // Usamos supabaseClient
+    const { data, error } = await supabaseClient
+        .from('reservas')
+        .select('*');
+
+    if (error) {
+        console.error("Error al traer reservas:", error.message);
+        return;
+    }
+
+    reservas = data || [];
 
     reservas.forEach(r => {
         let li = document.createElement("li");
