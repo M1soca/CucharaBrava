@@ -1,0 +1,909 @@
+/* ==========================================================================
+   1. ESTILOS BASE Y VARIABLES DE DISEÑO (iOS Premium & Temas Dinámicos)
+   ========================================================================== */
+:root {
+    --bg-dark: #070709;
+    --bg-card: rgba(22, 22, 28, 0.7);
+    --bg-card-light: rgba(255, 255, 255, 0.05);
+    --border-glass: rgba(255, 255, 255, 0.08);
+    
+    /* Configuración por Defecto (Login Neutral) */
+    --primary: #8e8e93;
+    --primary-gradient: linear-gradient(135deg, #8e8e93, #636366);
+    
+    --text-main: #f5f5f7;
+    --text-muted: #8e8e93;
+    --success: #30d158;
+    --error: #ff453a;
+    --radius-lg: 20px;
+    --radius-md: 14px;
+    --radius-sm: 8px;
+    --transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* TEMA CLIENTE: Colores Cálidos / Gastronómicos (Naranja a Rojo iOS) */
+body.role-client {
+    --primary: #ff9f0a;
+    --primary-gradient: linear-gradient(135deg, #ff9f0a, #ff453a);
+    --shadow-color: rgba(255, 159, 10, 0.3);
+}
+
+/* TEMA ADMINISTRADOR: Colores Corporativos / Gestión (Indigo a Púrpura iOS) */
+body.role-admin {
+    --primary: #5e5ce6;
+    --primary-gradient: linear-gradient(135deg, #5e5ce6, #af52de);
+    --shadow-color: rgba(94, 92, 230, 0.3);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    min-height: 100vh;
+    overflow-x: hidden;
+    background-image: radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.02), transparent 50%),
+                      radial-gradient(circle at 10% 80%, rgba(255, 255, 255, 0.02), transparent 50%);
+    transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+/* Transiciones de fondo por gradiente dinámico para cada rol */
+body.role-client {
+    background-image: radial-gradient(circle at 80% 20%, rgba(255, 159, 10, 0.08), transparent 50%),
+                      radial-gradient(circle at 10% 80%, rgba(255, 69, 58, 0.06), transparent 50%);
+}
+
+body.role-admin {
+    background-image: radial-gradient(circle at 80% 20%, rgba(94, 92, 230, 0.08), transparent 50%),
+                      radial-gradient(circle at 10% 80%, rgba(175, 82, 222, 0.06), transparent 50%);
+}
+
+/* Glassmorphism universal */
+.glass {
+    background: var(--bg-card);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-lg);
+}
+
+/* Scrollbars elegantes */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.02);
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+}
+
+/* ==========================================================================
+   2. ANIMACIONES Y CONTROL DE VISTAS (SPA)
+   ========================================================================== */
+.view-section {
+    display: none;
+    opacity: 0;
+    transform: scale(0.98);
+    transition: var(--transition);
+}
+.view-section.active {
+    display: flex;
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* ==========================================================================
+   3. ESTILOS LOGIN
+   ========================================================================== */
+.login-wrapper {
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+.login-container {
+    width: 100%;
+    max-width: 440px;
+    padding: 40px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+    text-align: center;
+}
+.brand-logo {
+    font-size: 3.5rem;
+    background: linear-gradient(135deg, #ff9f0a, #ff453a);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 10px;
+    display: inline-block;
+}
+.login-container h1 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 6px;
+    letter-spacing: -0.5px;
+}
+.login-container p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 30px;
+}
+.form-group {
+    text-align: left;
+    margin-bottom: 20px;
+}
+.form-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.form-control {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
+    padding: 14px 18px;
+    color: var(--text-main);
+    font-size: 1rem;
+    transition: var(--transition);
+}
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px var(--shadow-color);
+    background: rgba(255, 255, 255, 0.08);
+}
+.btn-primary {
+    width: 100%;
+    background: var(--primary-gradient);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-md);
+    padding: 15px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 8px 25px var(--shadow-color, rgba(255,255,255,0.05));
+}
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px var(--shadow-color, rgba(255,255,255,0.1));
+}
+.btn-primary:active {
+    transform: translateY(0);
+}
+.demo-info {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-md);
+    padding: 15px;
+    margin-top: 25px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+/* ==========================================================================
+   4. ESQUEMA DE INTERFAZ PRINCIPAL (MAIN SHELL)
+   ========================================================================== */
+.main-shell {
+    height: 100vh;
+    width: 100vw;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+}
+
+/* Barra Lateral (iOS Sidebar) */
+.sidebar {
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--border-glass);
+    justify-content: space-between;
+}
+.sidebar-brand-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 35px;
+    padding-left: 10px;
+}
+.sidebar-brand-wrapper i {
+    font-size: 2rem;
+    color: var(--primary);
+    transition: color 0.4s ease;
+}
+.sidebar-brand-wrapper h2 {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+.sidebar-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255,255,255,0.03);
+    padding: 14px;
+    border-radius: var(--radius-md);
+    margin-bottom: 30px;
+    border: 1px solid rgba(255,255,255,0.02);
+}
+.sidebar-profile i {
+    font-size: 2rem;
+    color: var(--primary);
+    transition: color 0.4s ease;
+}
+.profile-text h4 {
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+.profile-text span {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-weight: 600;
+}
+.sidebar-menu {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-grow: 1;
+}
+.menu-category-title {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 15px 0 5px 12px;
+}
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    color: var(--text-muted);
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    border: none;
+    background: transparent;
+    width: 100%;
+    text-align: left;
+}
+.menu-item:hover, .menu-item.active {
+    color: var(--text-main);
+    background: rgba(255, 255, 255, 0.06);
+}
+.menu-item.active {
+    background: var(--primary-gradient);
+    color: #fff;
+    box-shadow: 0 4px 15px var(--shadow-color);
+}
+.btn-logout {
+    border: 1px solid rgba(255, 69, 58, 0.2);
+    color: var(--error);
+    background: transparent;
+    padding: 12px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: var(--transition);
+}
+.btn-logout:hover {
+    background: rgba(255, 69, 58, 0.1);
+}
+
+/* Contenedor del contenido principal */
+.content-main {
+    padding: 40px;
+    overflow-y: auto;
+    position: relative;
+}
+.panel-container {
+    display: none;
+}
+.panel-container.active {
+    display: block;
+    animation: paneFadeIn 0.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+@keyframes paneFadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.panel-header {
+    margin-bottom: 30px;
+}
+.panel-header h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 5px;
+}
+.panel-header p {
+    color: var(--text-muted);
+    font-size: 1rem;
+}
+
+/* ==========================================================================
+   5. ASISTENTE DE RESERVA (WIZARD PASOS)
+   ========================================================================== */
+.wizard-progress {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 40px;
+    position: relative;
+}
+.wizard-progress::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: rgba(255,255,255,0.06);
+    z-index: 1;
+    transform: translateY(-50%);
+}
+.wizard-progress-bar {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 0%;
+    height: 3px;
+    background: var(--primary-gradient);
+    z-index: 2;
+    transform: translateY(-50%);
+    transition: var(--transition);
+}
+.wizard-step-node {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #16161c;
+    border: 2px solid rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    z-index: 3;
+    transition: var(--transition);
+    color: var(--text-muted);
+}
+.wizard-step-node.active {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: rgba(255, 159, 10, 0.15);
+    box-shadow: 0 0 15px var(--shadow-color);
+}
+body.role-admin .wizard-step-node.active {
+    background: rgba(94, 92, 230, 0.15);
+}
+.wizard-step-node.completed {
+    background: var(--primary-gradient);
+    border-color: transparent;
+    color: #fff;
+}
+
+.step-panel {
+    display: none;
+}
+.step-panel.active {
+    display: block;
+    animation: paneFadeIn 0.4s forwards;
+}
+
+/* Rejillas y layouts del Wizard */
+.grid-options-horizontal {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+.option-card-select {
+    padding: 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition);
+}
+.option-card-select:hover {
+    border-color: var(--primary);
+    background: rgba(255, 255, 255, 0.02);
+    transform: translateY(-4px);
+}
+.option-card-select.selected {
+    border-color: var(--primary);
+    background: rgba(255, 159, 10, 0.08);
+    box-shadow: 0 8px 25px var(--shadow-color);
+}
+body.role-admin .option-card-select.selected {
+    background: rgba(94, 92, 230, 0.08);
+}
+.option-card-select i {
+    font-size: 2.2rem;
+    color: var(--primary);
+    margin-bottom: 12px;
+    display: block;
+}
+.option-card-select h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+.option-card-select p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+/* Selector de Platos */
+.dishes-sub-selector {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+.food-item-box {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+}
+.food-item-box:hover {
+    transform: translateY(-4px);
+    border-color: var(--primary);
+}
+.food-item-box.selected {
+    border-color: var(--primary);
+    background: rgba(255, 159, 10, 0.05);
+    box-shadow: 0 0 20px var(--shadow-color);
+}
+body.role-admin .food-item-box.selected {
+    background: rgba(94, 92, 230, 0.05);
+}
+.food-item-img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-bottom: 1px solid var(--border-glass);
+}
+.food-item-details {
+    padding: 20px;
+}
+.food-item-details h4 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+.food-item-price {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--primary);
+}
+.selected-indicator {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: var(--primary);
+    color: #fff;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+}
+.food-item-box.selected .selected-indicator {
+    display: flex;
+}
+
+/* Distribución de mesas estilo cine */
+.cinema-room {
+    max-width: 650px;
+    margin: 0 auto;
+    padding: 30px;
+}
+.cinema-stage-label {
+    text-align: center;
+    padding: 15px;
+    background: var(--primary-gradient);
+    border-radius: var(--radius-sm);
+    font-weight: 800;
+    letter-spacing: 2px;
+    font-size: 0.85rem;
+    color: #fff;
+    box-shadow: 0 5px 20px var(--shadow-color);
+    margin-bottom: 40px;
+}
+.seats-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 15px;
+}
+.seat-btn {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-md);
+    padding: 15px 10px;
+    cursor: pointer;
+    text-align: center;
+    color: var(--text-main);
+    transition: var(--transition);
+}
+.seat-btn:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: var(--primary);
+}
+.seat-btn i {
+    font-size: 1.4rem;
+    display: block;
+    margin-bottom: 4px;
+}
+.seat-btn span {
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+.seat-btn.selected {
+    background: var(--primary-gradient) !important;
+    border-color: transparent !important;
+    color: #fff;
+    box-shadow: 0 5px 15px var(--shadow-color);
+}
+.seat-btn.occupied {
+    background: rgba(255, 69, 58, 0.12) !important;
+    border-color: rgba(255, 69, 58, 0.2) !important;
+    color: var(--error) !important;
+    cursor: not-allowed;
+}
+
+.wizard-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+    border-top: 1px solid var(--border-glass);
+    padding-top: 25px;
+}
+.btn-nav-wiz {
+    border-radius: var(--radius-md);
+    padding: 14px 28px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: var(--transition);
+    border: none;
+}
+.btn-nav-wiz-prev {
+    background: rgba(255,255,255,0.06);
+    color: var(--text-main);
+    border: 1px solid var(--border-glass);
+}
+.btn-nav-wiz-prev:hover {
+    background: rgba(255,255,255,0.1);
+}
+.btn-nav-wiz-next {
+    background: var(--primary-gradient);
+    color: #fff;
+    box-shadow: 0 4px 15px var(--shadow-color);
+}
+.btn-nav-wiz-next:hover {
+    transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   6. MAQUETA DE BOLETA / CONFIRMACIÓN
+   ========================================================================== */
+.voucher-box {
+    background: #fff;
+    color: #000;
+    border-radius: var(--radius-md);
+    padding: 30px;
+    max-width: 480px;
+    margin: 0 auto;
+    font-family: 'Courier New', Courier, monospace;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    position: relative;
+}
+.voucher-box::before, .voucher-box::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 8px;
+    background-size: 16px 8px;
+    background-repeat: repeat-x;
+}
+.voucher-box::before {
+    top: -4px;
+    background-image: linear-gradient(45deg, transparent 33.333%, #fff 33.333%, #fff 66.667%, transparent 66.667%), linear-gradient(-45deg, transparent 33.333%, #fff 33.333%, #fff 66.667%, transparent 66.667%);
+}
+.voucher-box::after {
+    bottom: -4px;
+    background-image: linear-gradient(45deg, transparent 33.333%, #fff 33.333%, #fff 66.667%, transparent 66.667%), linear-gradient(-45deg, transparent 33.333%, #fff 33.333%, #fff 66.667%, transparent 66.667%);
+    transform: rotate(180deg);
+}
+.voucher-header {
+    text-align: center;
+    border-bottom: 2px dashed #ccc;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+.voucher-header h2 {
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin-bottom: 5px;
+}
+.voucher-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+.voucher-divider {
+    border-bottom: 1px dashed #ccc;
+    margin: 15px 0;
+}
+.voucher-total-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.15rem;
+    font-weight: 800;
+}
+
+/* ==========================================================================
+   7. DASHBOARD METRICAS (ADMIN)
+   ========================================================================== */
+.admin-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+.stat-card {
+    padding: 25px;
+    position: relative;
+    overflow: hidden;
+}
+.stat-card i {
+    font-size: 2.2rem;
+    color: var(--primary);
+    opacity: 0.85;
+    margin-bottom: 15px;
+    display: inline-block;
+    transition: color 0.4s ease;
+}
+.stat-card h3 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 5px;
+}
+.stat-card p {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* TABLAS GESTION */
+.table-glass-wrapper {
+    overflow-x: auto;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-glass);
+    background: rgba(22, 22, 28, 0.4);
+    margin-top: 20px;
+}
+.table-glass {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.95rem;
+}
+.table-glass th, .table-glass td {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-glass);
+}
+.table-glass th {
+    font-weight: 700;
+    color: var(--text-muted);
+    background: rgba(255,255,255,0.01);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.table-glass tr:last-child td {
+    border-bottom: none;
+}
+.status-badge {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+.status-badge.pendiente {
+    background: rgba(255, 159, 10, 0.15);
+    color: #ff9f0a;
+}
+body.role-admin .status-badge.pendiente {
+    background: rgba(94, 92, 230, 0.15);
+    color: #5e5ce6;
+}
+.status-badge.completado {
+    background: rgba(48, 209, 88, 0.15);
+    color: var(--success);
+}
+.status-badge.cancelado {
+    background: rgba(255, 69, 58, 0.15);
+    color: var(--error);
+}
+
+/* ==========================================================================
+   8. ADMIN CRUD MENU INTERFACE
+   ========================================================================== */
+.admin-crud-split {
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 30px;
+}
+.panel-crud-form {
+    padding: 25px;
+    align-self: start;
+}
+.panel-crud-form h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+.dish-admin-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    border-radius: var(--radius-md);
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border-glass);
+    margin-bottom: 12px;
+}
+.dish-admin-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.dish-admin-info img {
+    width: 50px;
+    height: 50px;
+    border-radius: var(--radius-sm);
+    object-fit: cover;
+}
+.dish-admin-meta h4 {
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+.dish-admin-meta span {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+.btn-action-icon {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    padding: 6px;
+    border-radius: var(--radius-sm);
+    transition: var(--transition);
+}
+.btn-action-edit {
+    color: var(--primary);
+}
+.btn-action-delete {
+    color: var(--error);
+}
+.btn-action-icon:hover {
+    background: rgba(255,255,255,0.05);
+}
+
+/* ==========================================================================
+   9. ALERTS & TOAST
+   ========================================================================== */
+.toast-system {
+    position: fixed;
+    top: 25px;
+    right: 25px;
+    z-index: 9999;
+    background: rgba(20, 20, 25, 0.9);
+    border: 1px solid var(--border-glass);
+    padding: 15px 25px;
+    border-radius: 50px;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #fff;
+    font-weight: 600;
+    transform: translateY(-20px);
+    opacity: 0;
+    transition: var(--transition);
+    pointer-events: none;
+    backdrop-filter: blur(10px);
+}
+.toast-system.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* ==========================================================================
+   10. SECCIÓN IMPRESIÓN (PRINT STYLES)
+   ========================================================================== */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    .voucher-box, .voucher-box * {
+        visibility: visible;
+    }
+    .voucher-box {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        box-shadow: none;
+        background: #fff;
+        color: #000;
+    }
+}
+
+/* Estilos para el Modal de Confirmación */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    animation: fadeIn 0.25s ease;
+}
+
+.modal-content {
+    background: rgba(20, 20, 20, 0.6) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    padding: 30px;
+    border-radius: 16px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    animation: scaleUp 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes scaleUp { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }

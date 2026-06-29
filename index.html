@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Cuchara Brava — Sistema de Reservas & Menú</title>
+    <!-- Iconos estilo Apple / Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Google Font - Inter & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Estilos de la aplicación -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+      
+    <div id="toast-notif" class="toast-system">
+        <i id="toast-icon" class="bi bi-info-circle"></i>
+        <span id="toast-message">Mensaje informativo</span>
+    </div>
+
+    <!-- PANTALLA LOGIN -->
+    <section id="view-login" class="view-section login-wrapper active">
+        <div class="login-container glass">
+            <div class="brand-logo"><i class="bi bi-egg-fried"></i></div>
+            <h1>La Cuchara Brava</h1>
+            <p>Sabor y tradición criolla al instante</p>
+            
+            <form id="form-login">
+                <div class="form-group">
+                    <label for="login-username">Usuario</label>
+                    <input type="text" id="login-username" class="form-control" placeholder="admin o cliente" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Contraseña</label>
+                    <input type="password" id="login-password" class="form-control" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-primary">Entrar al Sistema</button>
+            </form>
+        </div>
+    </section>
+
+     <!-- INTERFAZ PRINCIPAL -->
+    <section id="view-main" class="view-section main-shell">
+        
+        <!-- SIDEBAR DE NAVEGACIÓN -->
+        <aside class="sidebar glass">
+            <div>
+                <div class="sidebar-brand-wrapper">
+                    <i class="bi bi-egg-fried"></i>
+                    <h2>La Cuchara Brava</h2>
+                </div>
+
+                <div class="sidebar-profile">
+                    <i class="bi bi-person-circle"></i>
+                    <div class="profile-text">
+                        <h4 id="profile-name">Nombre de Usuario</h4>
+                        <span id="profile-role">Rol</span>
+                    </div>
+                </div>
+
+                <nav class="sidebar-menu">
+                    <!-- MENU CLIENTES -->
+                    <div class="client-only-menu">
+                        <div class="menu-category-title">Tu Experiencia</div>
+                        <button class="menu-item active" data-target="panel-client-booking">
+                            <i class="bi bi-calendar-check"></i> Reservar Mesa & Plato
+                        </button>
+                        <button class="menu-item" data-target="panel-client-history">
+                            <i class="bi bi-clock-history"></i> Mi Historial
+                        </button>
+                    </div>
+
+                    <!-- MENU ADMINISTRADOR -->
+                    <div class="admin-only-menu" style="display: none;">
+                        <div class="menu-category-title">Gestión Admin</div>
+                        <button class="menu-item" data-target="panel-admin-dashboard">
+                            <i class="bi bi-grid-1x2"></i> Métricas & Dashboard
+                        </button>
+                        <button class="menu-item" data-target="panel-admin-orders">
+                            <i class="bi bi-cart3"></i> Reservas y Pedidos
+                        </button>
+                        <button class="menu-item" data-target="panel-admin-menu-crud">
+                            <i class="bi bi-book"></i> Carta Criolla Semanal
+                        </button>
+                        <button class="menu-item" data-target="panel-admin-tables">
+                            <i class="bi bi-calendar-range"></i> Horarios & Mesas
+                        </button>
+                    </div>
+                </nav>
+            </div>
+
+            <button id="btn-logout-sidebar" class="btn-logout">
+                <i class="bi bi-power"></i> Cerrar Sesión
+            </button>
+        </aside>
+    
+    <!-- CONTENIDO PRINCIPAL DINAMICO -->
+        <main class="content-main">
+
+            <!-- PANEL: CLIENTE — SISTEMA WIZARD PASOS DE RESERVA -->
+            <div id="panel-client-booking" class="panel-container active">
+                <div class="panel-header">
+                    <h1>Reserva Inteligente</h1>
+                    <p>Completa los pasos para agendar tu mesa y comida criolla favorita</p>
+                </div>
+
+                <!-- Barra de Pasos -->
+                <div class="wizard-progress">
+                    <div id="progress-bar-line" class="wizard-progress-bar"></div>
+                    <div class="wizard-step-node active" id="node-step1">1</div>
+                    <div class="wizard-step-node" id="node-step2">2</div>
+                    <div class="wizard-step-node" id="node-step3">3</div>
+                    <div class="wizard-step-node" id="node-step4">4</div>
+                    <div class="wizard-step-node" id="node-step5">5</div>
+                </div>
+
+                <!-- PASO 1: Selección de Fecha -->
+                <div id="step-panel1" class="step-panel active">
+                    <h2 class="mb-2" style="font-size:1.4rem; margin-bottom:15px;">Paso 1: ¿Cuándo nos visitas?</h2>
+                    <p style="color:var(--text-muted); margin-bottom: 20px;">Nuestro menú criollo se renueva diariamente. Selecciona la fecha para cargar la carta del día correspondiente.</p>
+                    <div class="form-group" style="max-width: 400px;">
+                        <label for="booking-date">Fecha de Reserva</label>
+                        <input type="date" id="booking-date" class="form-control">
+                    </div>
+                </div>
+    
+    <!-- PASO 2: Selección de comida y plato -->
+                <div id="step-panel2" class="step-panel">
+                    <h2 style="font-size:1.4rem; margin-bottom:15px;">Paso 2: Menú Semanal (<span id="day-of-week-label">Día</span>)</h2>
+                    <p style="color:var(--text-muted); margin-bottom: 25px;">Selecciona el momento de tu reserva y escoge tu potaje con su bebida.</p>
+                    
+                    <div class="form-group" style="max-width:300px; margin-bottom: 25px;">
+                        <label for="booking-meal-type">Tipo de Servicio</label>
+                        <select id="booking-meal-type" class="form-control">
+                            <option value="Desayuno">Desayuno</option>
+                            <option value="Almuerzo" selected>Almuerzo</option>
+                            <option value="Cena">Cena</option>
+                        </select>
+                    </div>
+
+                    <h3 style="font-size:1.1rem; margin-bottom:15px; color: var(--primary);">Escoge un Plato</h3>
+                    <div id="dishes-list-step" class="dishes-sub-selector">
+                        <!-- Platos cargados dinámicamente -->
+                    </div>
+
+                    <h3 style="font-size:1.1rem; margin-top:30px; margin-bottom:15px; color: var(--primary);">Escoge una Bebida</h3>
+                    <div id="drinks-list-step" class="dishes-sub-selector">
+                        <!-- Bebidas cargadas dinámicamente -->
+                    </div>
+                </div>
+    <!-- PASO 3: Selección de horario, ambiente, celular y personas -->
+                <div id="step-panel3" class="step-panel">
+                    <h2 style="font-size:1.4rem; margin-bottom:15px;">Paso 3: Datos de la Reserva y Ambiente</h2>
+                    <p style="color:var(--text-muted); margin-bottom: 25px;">Completa tu experiencia seleccionando las condiciones de tu visita e ingresando tus datos de contacto.</p>
+                    
+                    <div class="grid-options-horizontal" style="margin-bottom: 20px;">
+                        <!-- Número de Celular -->
+                        <div class="form-group">
+                            <label for="booking-phone">Número de Celular</label>
+                            <input type="tel" id="booking-phone" class="form-control" placeholder="Ej: 987654321" required>
+                        </div>
+
+                        <!-- Número de Personas -->
+                        <div class="form-group">
+                            <label for="booking-guests">¿Cuántas personas asistirán?</label>
+                            <input type="number" id="booking-guests" class="form-control" min="1" max="15" value="2" required>
+                        </div>
+                    </div>
+
+                    <div class="grid-options-horizontal">
+                        <!-- Ambiente -->
+                        <div class="form-group">
+                            <label for="booking-environment">Ubicación del Ambiente</label>
+                            <select id="booking-environment" class="form-control">
+                                <option value="Salón General">Salón Principal</option>
+                                <option value="Zona Ventana">Mesa Frente a Ventana (+S/. 5.00)</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Horario -->
+                        <div class="form-group">
+                            <label for="booking-time-select">HORARIOS DISPONIBLES</label>
+                            <select id="booking-time-select" class="form-control" onchange="actualizarReservaHorario()">
+                                </select>
+                        </div>
+
+                        <!-- Música en Vivo -->
+                        <div class="form-group">
+                            <label for="booking-live-music">¿Deseas Show de Música Criolla en Vivo?</label>
+                            <select id="booking-live-music" class="form-control">
+                                <option value="No">No, ambiente tranquilo</option>
+                                <option value="Sí">¡Sí, por favor! (+S/. 10.00)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+    <!-- PASO 4: Selección de Mesa (Estilo Cine) -->
+                <div id="step-panel4" class="step-panel">
+                    <h2 style="font-size:1.4rem; margin-bottom:15px;">Paso 4: Reserva de Mesa</h2>
+                    <p style="color:var(--text-muted); text-align:center; margin-bottom: 25px;">Distribución geométrica del salón. Selecciona una mesa libre.</p>
+                    
+                    <div class="cinema-room glass">
+                        <div class="cinema-stage-label">ESCENARIO PRINCIPAL / SHOW EN VIVO</div>
+                        <div class="seats-grid" id="cinema-seats-grid">
+                            <!-- Mesas generadas por Javascript -->
+                        </div>
+                    </div>
+                </div>        
+    
+    <!-- PASO 5: Confirmación y Boleta -->
+                <div id="step-panel5" class="step-panel">
+                    <h2 style="font-size:1.4rem; margin-bottom:15px; text-align:center;">Paso 5: Resumen & Boleta de Pago</h2>
+                    <p style="color:var(--text-muted); text-align:center; margin-bottom: 25px;">Verifica la información generada antes de confirmar tu reserva.</p>
+                    
+                    <div id="ticket-preview-box" class="voucher-box">
+                        <!-- Renderizado de boleta por JS -->
+                    </div>
+
+                    <div style="text-align: center; margin-top:25px;">
+                        <button onclick="window.print()" class="btn-primary" style="max-width:250px; background: #333; margin-right: 15px;">
+                            <i class="bi bi-printer"></i> Imprimir Boleta
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Control de navegación del Wizard -->
+                <div class="wizard-navigation">
+                    <button id="btn-wiz-prev" class="btn-nav-wiz btn-nav-wiz-prev">Atrás</button>
+                    <button id="btn-wiz-next" class="btn-nav-wiz btn-nav-wiz-next">Continuar</button>
+                </div>
+            </div>
+         
+    <!-- PANEL: CLIENTE — HISTORIAL DE COMPRAS -->
+            <div id="panel-client-history" class="panel-container">
+                <div class="panel-header">
+                    <h1>Tu Historial de Consumos</h1>
+                    <p>Monitorea y revisa todas tus visitas y órdenes</p>
+                </div>
+
+                <div class="table-glass-wrapper">
+                    <table class="table-glass">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Fecha Reserva</th>
+                                <th>Servicio</th>
+                                <th>Detalle Menú</th>
+                                <th>Mesa / Comensales</th>
+                                <th>Total Pagado</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody id="client-history-rows">
+                            <!-- Filas generadas dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+    
+    <!-- PANEL ADMIN: DASHBOARD / METRICAS -->
+            <div id="panel-admin-dashboard" class="panel-container">
+                <div class="panel-header">
+                    <h1>Dashboard del Restaurante</h1>
+                    <p>Monitoreo financiero y operacional del día</p>
+                </div>
+
+                <div class="admin-stats-grid">
+                    <div class="stat-card glass">
+                        <i class="bi bi-cash-stack"></i>
+                        <h3 id="stat-total-income">S/. 0.00</h3>
+                        <p>Ingresos Totales (Soles)</p>
+                    </div>
+                    <div class="stat-card glass">
+                        <i class="bi bi-calendar-heart"></i>
+                        <h3 id="stat-total-reservations">0</h3>
+                        <p>Reservas Concretadas</p>
+                    </div>
+                    <div class="stat-card glass">
+                        <i class="bi bi-grid-3x3-gap"></i>
+                        <h3 id="stat-table-occupation">0%</h3>
+                        <p>Ocupación de Mesas</p>
+                    </div>
+                </div>
+            </div>
+
+        <!-- PANEL ADMIN: LISTA RESERVAS Y PEDIDOS + BUSQUEDAS -->
+            <div id="panel-admin-orders" class="panel-container">
+                <div class="panel-header">
+                    <h1>Gestión de Pedidos & Reservas</h1>
+                    <p>Control de comandas, datos de clientes y filtro calendario</p>
+                </div>
+
+                <div class="glass" style="padding:20px; margin-bottom: 20px; display:flex; gap:15px; align-items:center;">
+                    <div class="form-group" style="margin-bottom:0; flex-grow:1; max-width:300px;">
+                        <label for="admin-search-date">Buscar por Fecha</label>
+                        <input type="date" id="admin-search-date" class="form-control">
+                    </div>
+                    <button onclick="clearAdminSearchDate()" class="btn-primary" style="width:auto; margin-top:20px; background: rgba(255,255,255,0.05); border:1px solid var(--border-glass);">Ver Todas</button>
+                </div>
+
+                <div class="table-glass-wrapper">
+                    <table class="table-glass">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Comensal / Contacto</th>
+                                <th>Fecha</th>
+                                <th>Servicio</th>
+                                <th>Plato / Bebida</th>
+                                <th>Mesa / Pers. / Amb.</th>
+                                <th>Total</th>
+                                <th>Estado</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-orders-rows">
+                            <!-- Filas generadas por Javascript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        
+        <!-- PANEL ADMIN: CRUD PLATOS MENÚ SEMANAL -->
+            <div id="panel-admin-menu-crud" class="panel-container">
+                <div class="panel-header">
+                    <h1>Carta Criolla Semanal</h1>
+                    <p>Añade, edita y gestiona los platos por cada día de la semana y tipo de comida</p>
+                </div>
+
+                <div class="admin-crud-split">
+                    <!-- Formulario de ingreso de platos -->
+                    <div class="panel-crud-form glass">
+                        <h3 id="crud-form-title">Añadir Nuevo Plato</h3>
+                        <form id="form-crud-dish">
+                            <input type="hidden" id="crud-dish-id">
+                            
+                            <div class="form-group">
+                                <label for="crud-dish-name">Nombre del Plato / Bebida</label>
+                                <input type="text" id="crud-dish-name" class="form-control" required placeholder="Ej: Ceviche Carretillero">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="crud-dish-day">Día de la Semana</label>
+                                <select id="crud-dish-day" class="form-control" required>
+                                    <option value="Lunes">Lunes</option>
+                                    <option value="Martes">Martes</option>
+                                    <option value="Miércoles">Miércoles</option>
+                                    <option value="Jueves">Jueves</option>
+                                    <option value="Viernes">Viernes</option>
+                                    <option value="Sábado">Sábado</option>
+                                    <option value="Domingo">Domingo</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="crud-dish-category">Tipo de Servicio / Categoría</label>
+                                <select id="crud-dish-category" class="form-control" required>
+                                    <option value="Desayuno">Desayuno</option>
+                                    <option value="Almuerzo">Almuerzo</option>
+                                    <option value="Cena">Cena</option>
+                                    <option value="Bebida">Bebida (Acompañamiento)</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="crud-dish-price">Precio (S/.)</label>
+                                <input type="number" step="0.10" id="crud-dish-price" class="form-control" required placeholder="S/. 25.00">
+                            </div>
+
+                            <button type="submit" id="btn-submit-crud" class="btn-primary">Guardar en la Carta</button>
+                            <button type="button" id="btn-cancel-crud" class="btn-primary" style="display:none; background:#222; margin-top:10px;">Cancelar Edición</button>
+                        </form>
+                    </div>
+
+                    <!-- Lista de platos existentes -->
+                    <div class="glass" style="padding: 25px;">
+                        <h3 style="font-size: 1.25rem; margin-bottom: 20px;">Filtro de Listado Administrativo</h3>
+                        
+                        <div style="display:flex; gap:12px; margin-bottom:20px;">
+                            <select id="admin-filter-day" class="form-control">
+                                <option value="Todos">Todos los días</option>
+                                <option value="Lunes">Lunes</option>
+                                <option value="Martes">Martes</option>
+                                <option value="Miércoles">Miércoles</option>
+                                <option value="Jueves">Jueves</option>
+                                <option value="Viernes">Viernes</option>
+                                <option value="Sábado">Sábado</option>
+                                <option value="Domingo">Domingo</option>
+                            </select>
+                            
+                            <select id="admin-filter-category" class="form-control">
+                                <option value="Todos">Todas las categorías</option>
+                                <option value="Desayuno">Desayuno</option>
+                                <option value="Almuerzo">Almuerzo</option>
+                                <option value="Cena">Cena</option>
+                                <option value="Bebida">Bebida</option>
+                            </select>
+                        </div>
+
+                        <div id="admin-dishes-grid" style="max-height: 500px; overflow-y:auto; padding-right:5px;">
+                            <!-- Items cargados por JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--alerta-eliminar plato-->
+                    <div id="custom-confirm-modal" class="modal-overlay" style="display: none;">
+            <div class="modal-content glass">
+                <div class="modal-icon">
+                    <i class="bi bi-exclamation-triangle" style="color: #f44336; font-size: 2.5rem;"></i>
+                </div>
+                <h3 id="confirm-modal-title" style="margin: 15px 0 10px 0; color: #fff; font-size: 1.3rem;">¿Estás seguro?</h3>
+                <p id="confirm-modal-message" style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 25px;">Esta acción no se puede deshacer.</p>
+                <div class="modal-actions" style="display: flex; gap: 12px; justify-content: center;">
+                    <button id="btn-confirm-cancel" class="btn-primary" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); width: auto; padding: 8px 20px;">Cancelar</button>
+                    <button id="btn-confirm-accept" class="btn-primary" style="background: #f44336; border: none; width: auto; padding: 8px 20px;">Eliminar</button>
+                </div>
+            </div>
+        </div>
+
+            <!-- PANEL ADMIN: HORARIOS Y MESAS -->
+            <div id="panel-admin-tables" class="panel-container">
+                <div class="panel-header">
+                    <h1>Configuración de Horarios & Mesas</h1>
+                    <p>Establece rangos horarios de atención y configura la capacidad de mesas</p>
+                </div>
+
+                <div class="admin-crud-split">
+                    <!-- Configuración de Horas -->
+                    <div class="form-container glass" style="padding:25px;">
+                        <h3>Rango de Operación del Local</h3>
+                        <form id="form-admin-hours" style="margin-top:20px;">
+                                <div class="form-group">
+                                    <label for="local-service-type">Seleccionar Servicio</label>
+                                    <select id="local-service-type" class="form-control" required>
+                                        <option value="Desayuno">Desayuno</option>
+                                        <option value="Almuerzo">Almuerzo</option>
+                                        <option value="Cena">Cena</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="local-open-time">Hora de Apertura</label>
+                                    <input type="time" id="local-open-time" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="local-close-time">Hora de Cierre</label>
+                                    <input type="time" id="local-close-time" class="form-control" required>
+                                </div>
+                                <button type="submit" class="btn-primary">Actualizar Horario General</button>
+                            </form>
+                    </div>
+        <!-- Configuración de Mesas -->
+                    <div class="glass" style="padding:25px;">
+                        <h3>Resetear o Liberar Mesas</h3>
+                        <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:20px;">Permite liberar las mesas ocupadas del establecimiento de forma manual o simular mesas bloqueadas.</p>
+                        <div style="display:flex; gap:15px;">
+                            <button onclick="resetAllTables()" class="btn-primary" style="background:var(--error); box-shadow:none;">Liberar Todas las Mesas</button>
+                            <button onclick="randomizeTables()" class="btn-primary" style="background:#222; box-shadow:none; border: 1px solid var(--border-glass);">Simular Ocupación Mixta</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </section>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="cuchara.js"></script>
+</body>
+</html>
